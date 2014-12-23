@@ -13,19 +13,23 @@ How To
 Sample of creating an amf channel and invoking a call
 
     Amf channel = new Amf('http://my-server/messaging/amf');
-    channel.invoke("destination", "operation"
+    channel.invoke("destination", "operation", [arg1, arg2],
     	(result) => print("Success $result"),
     	(error) => print("Error $error"));
 
 Custom classes need to be registered before you can receive them as Dart typed objects.
 
+	@RemoteObject("server.package.Animal")
 	class Animal {
 
 	}
 
+	@RemoteObject("another.server.package.BigInt")
     BigInt extends num {
     	
     }
+
+Alternatively they can be registered at runtime too
 
     Amf.registerClass("server.package.Animal", Animal);
     Amf.registerClass("another.server.package.BigInt", BigInt);

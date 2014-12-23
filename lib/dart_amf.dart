@@ -48,15 +48,30 @@ class Amf {
   static Map<Type, String> typeRegistry = new Map();
 
   Amf([String endpoint, int timeout = 30000]) {
-    Amf.registerClass("flex.messaging.messages.AcknowledgeMessage", AcknowledgeMessage);
-    Amf.registerClass("flex.messaging.messages.ErrorMessage", ErrorMessage);
-    Amf.registerClass("flex.messaging.io.ArrayCollection", ArrayCollection);
-    Amf.registerClass("flex.messaging.io.amf.ActionMessage", ActionMessage);
-    Amf.registerClass("flex.messaging.io.amf.MessageBody", MessageBody);
-    Amf.registerClass("flex.messaging.io.amf.MessageHeader", MessageHeader);
-    Amf.registerClass("flex.messaging.messages.CommandMessage", CommandMessage);
-    Amf.registerClass("flex.messaging.messages.RemotingMessage", RemotingMessage);
+    discoverRemoteObjects();
     init(endpoint, timeout);
+  }
+
+  void discoverRemoteObjects() {
+//    print("Discover");
+    currentMirrorSystem().libraries.forEach((uri, lib) {
+      lib.declarations.forEach((sym, declaration) {
+        if (declaration is ClassMirror) {
+          declaration.metadata
+            .where((metadata) => metadata.reflectee is RemoteObject)
+            .forEach((metadata) {
+//              print("    sym: $uri.$sym");
+              RemoteObject ro = metadata.reflectee;
+              ClassMirror cm = declaration as ClassMirror;
+              if (cm.hasReflectedType) {
+                Amf.registerClass(ro.alias, cm.reflectedType);
+              } else {
+                print("AMF Can't support generics please type it to Object or more specific");
+              }
+            });
+        }
+      });
+    });
   }
 
   void init(String endpoint, [int timeout = 30000]) {
@@ -69,6 +84,7 @@ class Amf {
   }
 
   static void registerClass(String name, Type clazz) {
+//    print("$name = $clazz");
     classRegistry[name] = clazz;
     typeRegistry[clazz] = name;
   }
@@ -1189,24 +1205,28 @@ class AbstractMessage {
   Object body;
 }
 
+@RemoteObject("flex.messaging.io.amf.ActionMessage")
 class ActionMessage {
   int version = 3;
   List<MessageHeader> headers = [];
   List<MessageBody> bodies = [];
 }
 
+@RemoteObject("flex.messaging.io.amf.MessageBody")
 class MessageBody {
   String targetURI = Amf.NULL_STRING;
   String responseURI = "/1";
   List<Object> data;
 }
 
+@RemoteObject("flex.messaging.io.amf.MessageBody")
 class MessageHeader {
   String name = "";
   bool mustUnderstand = false;
   Object data = null;
 }
 
+@RemoteObject("flex.messaging.messages.CommandMessage")
 class CommandMessage {
   int operation;
   String destination;
@@ -1216,12 +1236,14 @@ class CommandMessage {
   CommandMessage([this.operation = 5]);
 }
 
+@RemoteObject("flex.messaging.messages.RemotingMessage")
 class RemotingMessage extends AbstractMessage {
   String source = "";
   String operation;
   List parameters;
 }
 
+@RemoteObject("flex.messaging.messages.AcknowledgeMessage")
 class AcknowledgeMessage {
   Object body;
   Map headers = {};
@@ -1233,6 +1255,7 @@ class AcknowledgeMessage {
   double timeToLive;
 }
 
+@RemoteObject("flex.messaging.messages.ErrorMessage")
 class ErrorMessage {
   String faultCode;
   Map headers = {};
@@ -1249,15 +1272,21 @@ class ErrorMessage {
   String messageId;
 }
 
-class ArrayCollection<E> extends ListMixin {
+@RemoteObject("flex.messaging.io.ArrayCollection")
+class ArrayCollection extends ListMixin {
 
-  List<E> source;
+  List source;
 
   int get length => source.length;
       set length(int value) => source.length = value;
 
-  E operator [] (int index)          => source[index];
-    operator []=(int index, E value) => source[index] = value;
+  Object operator [] (int index)          => source[index];
+    operator []=(int index, Object value) => source[index] = value;
 
-  void addAll(Iterable<E> iterable) => source.addAll(iterable);
+  void addAll(Iterable<Object> iterable) => source.addAll(iterable);
+}
+
+class RemoteObject {
+  final String alias;
+  const RemoteObject(this.alias);
 }

@@ -1,0 +1,7 @@
+1.0.3 Added @RemoteObject metadata for remote classes like Flex.  Fixed example in doco.
+
+1.0.2 README changes
+
+1.0.1 Spelling and example changes
+
+1.0.0 Inital release
