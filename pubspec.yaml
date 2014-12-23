@@ -1,5 +1,5 @@
 name: dart_amf
-version: 1.0.1
+version: 1.0.2
 description: Provides native Dart access to the AMF protocol and BlazeDS backends
 dependencies:
   browser: ">=0.10.0+2 <0.11.0"
