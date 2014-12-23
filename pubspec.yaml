@@ -7,4 +7,4 @@ dependencies:
 dev_dependencies:
 #  unittest: any
 author: Glen Blanchard <blanchard.glen@gmail.com>
-homepage: http://stackoverflow.com/users/652588/glen-blanchard
+homepage: https://github.com/blanchg/dart_amf
