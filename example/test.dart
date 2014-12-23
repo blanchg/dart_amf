@@ -27,29 +27,13 @@ void reverseText(MouseEvent event) {
   querySelector('#sample_text_id').text = buffer.toString();
 
   print("Starting to call amf");
-//  amf.invoke("monitorUCC", "getSupportedMonitors", [],
-//      (res) {
-//        print('success: $res');
-//        amf.login("MineStar", "MineStar",
-//        (res) {
-//          print("Logged in $res");
-//          amf.invoke("applicationService",  "getSessionInformation", [],
-//          (res) => print("Session: $res"),
-//          (err) => print("Sesison error: ${(err as ErrorMessage).faultString}"));
-//        },
-//        (err) => print("Failed to login $err"));
-//        amf.invoke("userUCC",  "getUserLogonDetails", ["MineStar"],
-//          (res) => print('User: $res'),
-//          (err) => print('Error: $err'));
-//      },
-//      (err) => print("Failed: ${(err as ErrorMessage).faultString}"));
-  amf.invoke("monitorUCC", "getServerTime", [],
+  amf.invoke("server", "getServerTime", [],
   (res) {
     print("Server time ${(res as num).toInt()}");
-    amf.login("MineStar", "MineStar",
+    amf.login("username", "password",
         (res) {
           print("Logged in $res");
-          amf.invoke("applicationService", "getSessionInformation", [],
+          amf.invoke("server", "getSessionInformation", [],
               (res) => print("Session: $res"),
               (err) => print("Sesison error: ${(err as ErrorMessage).faultString}"));
         },
