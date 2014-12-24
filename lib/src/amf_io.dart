@@ -317,7 +317,7 @@ class Writer {
       this.write(AmfIO.STRING_TYPE);
       this.writeStringWithoutType(v);
     } else if (v is num) {
-      if (v == v.abs()) {
+      if (v is int) {
         this.writeAmfInt((v).toInt());
       } else {
         this.write(AmfIO.DOUBLE_TYPE);
