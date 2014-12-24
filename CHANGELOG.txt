@@ -1,3 +1,5 @@
+2.0.1 Fix writing negative doubles
+
 2.0.1 Fix writing ints
 
 2.0.0 WARNING Will break if you used any internals of this library, hence the major version change. Refactored to use the Dart library conventions better and only expose what was needed to. Fixed the example. Added some dartdoc.

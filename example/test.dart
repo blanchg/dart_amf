@@ -33,6 +33,8 @@ void login(MouseEvent event) {
     querySelector('#result_id')
       ..text = "Logged in $res";
     querySelector('#sample_text_id').text = 'Done';
+
+    amf.invoke("server", "methodOnServer",[new MyClass()], (res)=>print(res), (err)=>print(err));
   }, (err) {
     print("Failed to login ${(err as ErrorMessage).faultString}");
     querySelector('#result_id')

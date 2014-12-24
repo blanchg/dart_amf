@@ -186,10 +186,12 @@ class Writer {
       d = -2147483648;
     } else {
       d = 0;
-      v = v.abs();
     }
+    v = v.abs();
     if (v == double.INFINITY) {
-      r[0] = d | 2146435072;
+      r[0] = d;
+      if (r[0] == 0)
+        r[0] = 2146435072;
       return r;
     }
     for (e = 0; v >= 2 && e <= 1023;) {
@@ -202,18 +204,28 @@ class Writer {
     }
     e += 1023;
     if (e == 2047) {
-      r[0] = d | 2146435072;
+      r[0] = d;
+      if (r[0] == 0) {
+        r[0] = 2146435072;
+      }
       return r;
     }
+
     double i;
     if (e == 0) {
-      i = v * pow(2, 23) / 2;
+      i = (v / 2) * pow(2, 23);
       r[1] = (v * pow(2, 52) / 2).round();
     } else {
       i = v * pow(2, 20) - pow(2, 20);
       r[1] = (v * pow(2, 52) - pow(2, 52)).round();
     }
-    r[0] = d | e << 20 & 2147418112 | i.floor() & 1048575;
+    r[0] = d;
+    if (r[0] == 0) {
+      r[0] = e << 20 & 2147418112;
+    }
+    if (r[0] == 0) {
+      r[0] = i.floor() & 1048575;
+    }
     return r;
   }
 
