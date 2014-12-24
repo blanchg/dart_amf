@@ -1,3 +1,5 @@
+2.0.4 Make ArrayCollection available as a generic type
+
 2.0.3 Fix some documentation and made the endpoint non optional to the Amf constructor
 
 2.0.2 Fix writing negative doubles

@@ -80,16 +80,15 @@ class ErrorMessage {
   String messageId;
 }
 
-@RemoteObject("flex.messaging.io.ArrayCollection")
-class ArrayCollection extends ListMixin {
+class ArrayCollection<E> extends ListMixin {
 
-  List source;
+  List<E> source;
 
   int get length => source.length;
       set length(int value) => source.length = value;
 
-  Object operator [] (int index)          => source[index];
-    operator []=(int index, Object value) => source[index] = value;
+  E operator [] (int index)          => source[index];
+    operator []=(int index, E value) => source[index] = value;
 
-  void addAll(Iterable<Object> iterable) => source.addAll(iterable);
+  void addAll(Iterable<E> iterable) => source.addAll(iterable);
 }

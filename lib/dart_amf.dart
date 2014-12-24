@@ -51,6 +51,7 @@ class Amf {
    * The server must use CORS or be on the same host and port for this to work
    */
   Amf(String endpoint, [int timeout = 30000]) {
+    AmfIO.registerClass("flex.messaging.io.ArrayCollection", ArrayCollection);
     AmfIO.discoverRemoteObjects();
     _init(endpoint, timeout);
   }
