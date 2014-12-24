@@ -50,7 +50,7 @@ class Amf {
    * Creates a connection to a remote BlazeDS server
    * The server must use CORS or be on the same host and port for this to work
    */
-  Amf([String endpoint, int timeout = 30000]) {
+  Amf(String endpoint, [int timeout = 30000]) {
     AmfIO.discoverRemoteObjects();
     _init(endpoint, timeout);
   }

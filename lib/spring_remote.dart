@@ -1,4 +1,4 @@
-library dart_amf;
+library spring_remote;
 
 import 'src/metadata.dart';
 
